@@ -1,8 +1,8 @@
-# HN Notables
+# Orange Names
 
 ![Screenshot](docs/screenshot.png)
 
-Browser extension that highlights notable Hacker News users in orange. Click a highlighted name to see who they are.
+Browser extension that paints notable Hacker News users orange. Click a highlighted name to see who they are.
 
 ## Install
 
