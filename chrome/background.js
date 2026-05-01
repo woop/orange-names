@@ -1,1 +1,1 @@
-../background.js
+../firefox/background.js

@@ -1,1 +1,1 @@
-../notables.js
+../firefox/notables.js

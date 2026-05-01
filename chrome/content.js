@@ -1,1 +1,1 @@
-../content.js
+../firefox/content.js

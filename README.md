@@ -13,7 +13,7 @@ Browser extension that highlights noteworthy people on Hacker News. Notable user
 
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on"
-3. Select `manifest.json` from this directory
+3. Select `firefox/manifest.json`
 4. Navigate to [Hacker News](https://news.ycombinator.com/)
 
 ## Status
