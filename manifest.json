@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "HN Notables",
+  "version": "0.1.0",
+  "description": "Highlights notable commenters on Hacker News list pages.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://hn.algolia.com/*"],
+  "background": {
+    "scripts": ["notables.js", "background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://news.ycombinator.com/*"],
+      "js": ["notables.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hn-notables@willem.local",
+      "strict_min_version": "115.0"
+    }
+  }
+}
