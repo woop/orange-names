@@ -20,4 +20,4 @@ Browser extension that paints notable Hacker News users orange. Click a highligh
 
 ## Updating the notables list
 
-Edit `firefox/notables.js`. Each entry maps an HN username to name, role, bio, and links. Chrome picks up the same file via symlink, so only edit it in `firefox/`.
+Edit `firefox/notables.js`. Each entry maps an HN username to name, role, bio, and links. Then run `npm run sync` to copy the shared files into `chrome/` (CI fails if they drift).

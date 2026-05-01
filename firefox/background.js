@@ -75,8 +75,9 @@ async function sweepOldEntries() {
 
 sweepOldEntries();
 
-browser.runtime.onMessage.addListener((msg) => {
+browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === "fetchStory" && msg.storyId) {
-    return fetchStoryNotables(String(msg.storyId));
+    fetchStoryNotables(String(msg.storyId)).then(sendResponse);
+    return true;
   }
 });

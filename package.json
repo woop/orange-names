@@ -1,0 +1,14 @@
+{
+  "name": "hn-notables",
+  "private": true,
+  "scripts": {
+    "sync": "for f in background.js content.js notables.js styles.css; do cp firefox/$f chrome/$f; done",
+    "check-sync": "for f in background.js content.js notables.js styles.css; do diff -q firefox/$f chrome/$f || exit 1; done",
+    "test:chrome": "playwright test",
+    "lint:firefox": "web-ext lint -s firefox"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "web-ext": "^8.3.0"
+  }
+}

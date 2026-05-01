@@ -1,1 +1,67 @@
-../firefox/styles.css
+/* Inline list of notables in subtext (front page rows) */
+.hn-notables-list { color: #828282; }
+
+/* Any HN username link in NOTABLES, anywhere on the site */
+a.hn-notable-user,
+a.hn-notable-user:link,
+a.hn-notable-user:visited,
+a.hn-notable-user:hover,
+a.hn-notable-user:active {
+  color: #ff6600 !important;
+  font-weight: bold !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+a.hn-notable-user:hover { text-decoration: underline; }
+
+/* Popover — sized to match HN's 10pt Verdana density */
+.hn-notable-popover {
+  position: absolute;
+  z-index: 99999;
+  width: 380px;
+  max-width: calc(100vw - 16px);
+  background: #f6f6ef;
+  border: 1px solid #828282;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 6px 8px 7px;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 9pt;
+  color: #000;
+  line-height: 1.35;
+}
+.hn-notable-popover .hn-np-head { margin-bottom: 4px; }
+.hn-notable-popover .hn-np-name {
+  font-weight: bold;
+  font-size: 10pt;
+  color: #000;
+}
+.hn-notable-popover .hn-np-handle {
+  color: #828282;
+  font-size: 8pt;
+  margin-top: 1px;
+}
+.hn-notable-popover .hn-np-bio {
+  font-size: 9pt;
+  color: #000;
+  margin: 4px 0 6px;
+}
+.hn-notable-popover .hn-np-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  border-top: 1px solid #d0d0c8;
+  padding-top: 4px;
+}
+.hn-notable-popover a.hn-np-link,
+.hn-notable-popover a.hn-np-link:link,
+.hn-notable-popover a.hn-np-link:visited {
+  color: #828282 !important;
+  font-size: 8pt;
+  text-decoration: none;
+  font-weight: normal !important;
+}
+.hn-notable-popover a.hn-np-link:hover {
+  color: #ff6600 !important;
+  text-decoration: underline;
+}

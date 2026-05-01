@@ -4,9 +4,11 @@ Firefox + Chrome MV3 extension that highlights notable HN users with orange name
 
 ## Layout
 
-`firefox/` is the source of truth for shared files (`notables.js`, `background.js`, `content.js`, `styles.css`). `chrome/` symlinks to those same files and adds Chrome-only entries (`browser-polyfill.js`, `background-chrome.js` service worker that `importScripts` the shared bg). Each folder has its own `manifest.json`.
+`firefox/` is the source of truth for shared files (`notables.js`, `background.js`, `content.js`, `styles.css`). `chrome/` keeps real copies of those plus Chrome-only entries (`browser-polyfill.js`, `background-chrome.js` service worker that `importScripts` the shared bg). Each folder has its own `manifest.json`.
 
-Edit shared files in `firefox/`. Chrome picks them up via symlink. Firefox doesn't follow symlinks for temporary add-ons, which is why it's the canonical dir.
+Edit shared files in `firefox/`, then `npm run sync` to copy into `chrome/`. CI fails if the two drift. Symlinks don't work: Firefox temporary add-ons don't follow them at all, and Chrome's `--load-extension` follows them for the SW but not for content scripts.
+
+The message listener in `background.js` uses `sendResponse` + `return true` (not Promise return). Firefox supports both patterns; Chrome only supports `sendResponse`.
 
 ## Key decisions
 

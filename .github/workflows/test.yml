@@ -1,0 +1,45 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sync:
+    name: firefox/ and chrome/ shared files in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          for f in background.js content.js notables.js styles.css; do
+            if ! diff -q "firefox/$f" "chrome/$f"; then
+              echo "::error file=chrome/$f::out of sync with firefox/$f — run 'npm run sync'"
+              exit 1
+            fi
+          done
+
+  chrome-e2e:
+    name: Chrome extension E2E (real HN)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: xvfb-run --auto-servernum npm run test:chrome
+        env:
+          DEBUG: pw:browser*
+
+  firefox-lint:
+    name: Firefox manifest lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run lint:firefox
