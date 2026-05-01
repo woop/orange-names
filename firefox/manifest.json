@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "HN Notables",
+  "name": "Orange Names",
   "version": "0.1.0",
   "description": "Highlights notable commenters on Hacker News list pages.",
   "permissions": ["storage"],
