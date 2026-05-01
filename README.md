@@ -1,21 +1,23 @@
 # HN Notables
 
-Browser extension that highlights noteworthy people on Hacker News. Notable usernames appear in orange across all HN pages (front page, comment threads, user profiles). Clicking a highlighted name opens a popover with their real identity, role, bio, and links to their profiles elsewhere.
+![Screenshot](docs/screenshot.png)
 
-## How it works
+Browser extension that highlights notable Hacker News users in orange. Click a highlighted name to see who they are.
 
-- `notables.js` — curated dictionary of ~115 notable HN handles with metadata (name, role, bio, links)
-- `content.js` — content script that decorates matching `a.hnuser` links on every HN page; on list pages, queries the background script for notable commenters on each story
-- `background.js` — fetches comment authors per story via the Algolia HN Search API, caches results in `browser.storage.local` (3-min TTL, 7-day sweep, schema-versioned)
-- `styles.css` — orange highlight for notable names, HN-native popover styling
+## Install
 
-## Install (Firefox, development)
+### Firefox
 
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on"
 3. Select `firefox/manifest.json`
-4. Navigate to [Hacker News](https://news.ycombinator.com/)
 
-## Status
+### Chrome
 
-Working Firefox extension. Not yet published to AMO or Chrome Web Store.
+1. Open `chrome://extensions`
+2. Enable "Developer mode"
+3. Click "Load unpacked" and select the `chrome/` folder
+
+## Updating the notables list
+
+Edit `firefox/notables.js`. Each entry maps an HN username to name, role, bio, and links. Chrome picks up the same file via symlink, so only edit it in `firefox/`.
