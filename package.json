@@ -5,6 +5,7 @@
     "sync": "for f in background.js content.js notables.js styles.css; do cp firefox/$f chrome/$f; done",
     "check-sync": "for f in background.js content.js notables.js styles.css; do diff -q firefox/$f chrome/$f || exit 1; done",
     "test:chrome": "playwright test",
+    "record-demo": "node scripts/record-demo.js",
     "lint:firefox": "web-ext lint -s firefox"
   },
   "devDependencies": {

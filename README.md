@@ -2,7 +2,7 @@
 
 Browser extension that paints notable Hacker News users orange. Click a highlighted name to see who they are.
 
-![Screenshot](docs/screenshot.png)
+![Demo](docs/demo.gif)
 
 ## How it works
 
