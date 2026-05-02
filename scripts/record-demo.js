@@ -47,22 +47,68 @@ const VH = 900;
   await warm.waitForTimeout(3000);
   await warm.close();
 
-  // Recorded visit: cache is hot, names cascade in.
+  // Recorded visit: let everything finish rendering, then drive a manual
+  // hide/reveal so the GIF has a clear before/after instead of a
+  // sub-second cascade that's invisible at 18fps.
   const page = await context.newPage();
-  const navPromise = page.goto(URL, { waitUntil: "domcontentloaded" });
-  await navPromise;
+  const recordStart = Date.now();
+  await page.goto(URL, { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll(".hn-notables-list a.hn-notable").length > 5,
+    { timeout: 60_000 }
+  );
+  await page.waitForTimeout(1200);
 
-  // Scroll to roughly where notables tend to cluster on the snapshot.
-  await page.evaluate(() => window.scrollTo(0, 400));
+  // Scroll so the densest notable cluster sits in the crop window.
+  const targetY = await page.evaluate(() => {
+    const first = document.querySelector(".hn-notables-list a.hn-notable");
+    if (!first) return 200;
+    const tr = first.closest("tr");
+    const titleTr = tr.previousElementSibling || tr;
+    return Math.max(
+      0,
+      titleTr.getBoundingClientRect().top + window.scrollY - 60
+    );
+  });
+  await page.evaluate((y) => window.scrollTo(0, y), targetY);
+  await page.waitForTimeout(400);
 
-  // Wait for the cascade to play out.
-  await page.waitForTimeout(3500);
-
-  // Find a notable and grab the bounding box of its row to drive the crop.
   const first = page.locator(".hn-notables-list a.hn-notable").first();
   const row = first.locator("xpath=ancestor::tr[1]");
   const box = await row.boundingBox();
   console.log("notable row box:", box);
+
+  // 0.8s of "before" with notables hidden.
+  const tHide = (Date.now() - recordStart) / 1000;
+  console.log("tHide:", tHide.toFixed(2));
+  await page.addStyleTag({
+    content: `
+      .hn-notables-list { visibility: hidden !important; }
+      a.hnuser.hn-notable-user,
+      a.hn-notable-user,
+      a.hn-notable-user:link,
+      a.hn-notable-user:visited {
+        color: #828282 !important;
+        font-weight: normal !important;
+      }
+    `,
+  });
+  await page.waitForTimeout(1100);
+
+  // Reveal: drop the override, all names pop simultaneously.
+  await page.evaluate(() => {
+    document.querySelectorAll("style").forEach((s) => {
+      if (
+        s.textContent &&
+        s.textContent.includes(".hn-notables-list") &&
+        s.textContent.includes("visibility: hidden")
+      ) {
+        s.remove();
+      }
+    });
+  });
+  await page.waitForTimeout(2200);
 
   const recordPath = await page.video().path();
   await page.close();
@@ -82,9 +128,10 @@ const VH = 900;
   const cropY = Math.max(0, Math.min(VH - cropH, baseY));
 
   const cropExpr = `crop=${cropW}:${cropH}:${cropX}:${cropY}`;
-  // 3s clip starting ~0.5s in (skip the blank flash at navigation start).
-  const start = "0.5";
-  const dur = "3";
+  // Trim window: start exactly at the hide so the GIF loops
+  // gray -> pop -> hold instead of the other way around.
+  const start = tHide.toFixed(2);
+  const dur = "3.0";
   const filters = `${cropExpr},fps=18,scale=900:-1:flags=lanczos`;
   const palette = path.join(VIDEO_DIR, "palette.png");
 
